@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="txt_size_big">20sp</dimen>
+    <dimen name="txt_size_medium">16sp</dimen>
+    <dimen name="txt_size_small">12sp</dimen>
+
+    <dimen name="common_padding_top">12dp</dimen>
+    <dimen name="txt_padding_top">4dp</dimen>
+    <dimen name="txt_padding_left">4dp</dimen>
+    <dimen name="btn_padding">16dp</dimen>
+
+    <dimen name="list_item_h">150dp</dimen>
+</resources>

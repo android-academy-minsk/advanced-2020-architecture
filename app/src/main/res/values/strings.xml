@@ -1,0 +1,67 @@
+<resources>
+    <string name="app_name">Academy Minsk Movies</string>
+    <string name="txt_title">Avengers: Endgame</string>
+    <string name="txt_release">Released:</string>
+    <string name="txt_date">April 22, 2019</string>
+    <string name="txt_buttton">MOVIE TRAILER</string>
+    <string name="txt_overview">Overview:</string>
+    <string name="txt_description">1 There was an idea… 2 There was an idea… 3 There was an idea… 4 There was an idea… 5 There was an idea… 6 There was an idea… 7 There was an idea… 8 There was an idea… 9 There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea…
+        There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea…
+        There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea…
+        There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea…
+        There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea… There was an idea…</string>
+    <string name="toast_no_intent">No Intent available to handle action</string>
+
+    <string name="txt_title_2">Title 2</string>
+    <string name="txt_title_3">Title 3</string>
+    <string name="txt_title_4">Title 4</string>
+    <string name="txt_title_5">Title 5</string>
+    <string name="txt_title_6">Title 6</string>
+    <string name="txt_title_7">Title 7</string>
+    <string name="txt_title_8">Title 8</string>
+    <string name="txt_title_9">Title 9</string>
+    <string name="txt_title_10">Title 10</string>
+
+    <string name="txt_description_2">Description 2 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_3">Description 3 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_4">Description 4 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_5">Description 5 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_6">Description 6 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_7">Description 7 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_8">Description 8 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_9">Description 9 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+    <string name="txt_description_10">Description 10 D E S C R I P T I O N Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever... Best movie ever...</string>
+
+    <string name="txt_url_2">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_3">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_4">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_5">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_6">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_7">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_8">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_9">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="txt_url_10">https://www.youtube.com/watch?v=6ZfuNTqbHE8</string>
+    <string name="unknown">\?? ??</string>
+    <string name="menu_coroutine_activity_title">Corutine Activity</string>
+    <string name="menu_thread_handler_activity_title">Thread Handler Activity</string>
+
+
+    <string name="coroutine_create">Create</string>
+    <string name="coroutine_start">Start</string>
+    <string name="coroutine_stop">Stop</string>
+    <string name="fragment_coroutine_title">Coroutines activity</string>
+    <string name="fragment_handler_exe_title">This is Thread Handler Activity</string>
+
+    <string name="msg_oncreate">Coroutine created</string>
+    <string name="msg_onstart">Coroutine Started</string>
+    <string name="msg_oncancel">Coroutine cancelled</string>
+    <string name="msg_should_create_task">Must click \"create\" task first</string>
+    <string name="msg_thread_oncreate">Thread Task created</string>
+    <string name="msg_thread_onstart">Thread Task Started</string>
+    <string name="msg_thread_oncancel">Thread Task cancelled</string>
+    <string name="msg_preexecute">Pre execute run</string>
+    <string name="msg_postexecute">Post execute run</string>
+
+    <string name="done">Done!</string>
+    <string name="task_created">Job created</string>
+</resources>
