@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.viewpager.widget.ViewPager
 import by.androidacademy.architecture.adapters.DetailsFragmentAdapter
+import by.androidacademy.architecture.store.MoviesStore
+import kotlinx.android.synthetic.main.fragment_movies_gallery.*
 
 class DetailsGalleryFragment : Fragment() {
 
@@ -14,18 +16,10 @@ class DetailsGalleryFragment : Fragment() {
 
         private const val ARGS_MOVIE_POSITION = "ARGS_MOVIE_POSITION"
 
-        fun newInstance(
-            position: Int
-        ): DetailsGalleryFragment {
-            val fragment =
-                DetailsGalleryFragment()
-            val bundle = Bundle()
-            bundle.run {
-
-                putInt(ARGS_MOVIE_POSITION, position)
+        fun newInstance(position: Int): DetailsGalleryFragment {
+            return DetailsGalleryFragment().apply {
+                arguments = bundleOf(ARGS_MOVIE_POSITION to position)
             }
-            fragment.arguments = bundle
-            return fragment
         }
     }
 
@@ -34,15 +28,18 @@ class DetailsGalleryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.activity_details_for_fragments, container, false)
+        return inflater.inflate(R.layout.fragment_movies_gallery, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val position = arguments?.getInt(ARGS_MOVIE_POSITION) ?: 0
+        val movies = MoviesStore.getMovies()
 
-        view.findViewById<ViewPager>(R.id.vp_pager).run {
-            adapter = DetailsFragmentAdapter(childFragmentManager)
+        vp_pager.run {
+            adapter = DetailsFragmentAdapter(childFragmentManager, movies)
             currentItem = position
         }
-
-        return view
     }
 }

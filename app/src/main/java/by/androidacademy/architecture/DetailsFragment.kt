@@ -6,41 +6,39 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import by.androidacademy.architecture.helpers.GoToUrlHelper
-import by.androidacademy.architecture.providers.MoviesDataProvider
-import kotlinx.android.synthetic.main.activity_details_constraint.*
+import by.androidacademy.architecture.api.ApiConstants
+import by.androidacademy.architecture.api.RestService
+import by.androidacademy.architecture.api.response.MovieJson
+import by.androidacademy.architecture.api.response.MovieVideosResponse
+import coil.api.load
+import kotlinx.android.synthetic.main.fragment_movie_details.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DetailsFragment : Fragment() {
 
     companion object {
 
-        fun newInstance(position: Int): DetailsFragment {
-            val fragment = DetailsFragment()
-            val bundle = Bundle()
-            bundle.putInt(
-                DetailsActivity.MOVIE_TITLE, MoviesDataProvider.getResource(
-                    MoviesDataProvider.TYPE_TITLE, position
-                )
-            )
-            bundle.putInt(
-                DetailsActivity.MOVIE_DESCRIPTION,
-                MoviesDataProvider.getResource(MoviesDataProvider.TYPE_DESCRIPTION, position)
-            )
-            bundle.putInt(
-                DetailsActivity.MOVIE_IMAGE, MoviesDataProvider.getResource(
-                    MoviesDataProvider.TYPE_IMAGE, position
-                )
-            )
-            bundle.putInt(
-                DetailsActivity.MOVIE_URL, MoviesDataProvider.getResource(
-                    MoviesDataProvider.TYPE_IMAGE_URL, position
-                )
-            )
-            fragment.arguments = bundle
-            return fragment
+        private const val ARG_MOVIE = "arg.movie"
+
+        fun newInstance(movie: MovieJson): DetailsFragment {
+            return DetailsFragment().apply {
+                arguments = bundleOf(ARG_MOVIE to movie)
+            }
         }
+    }
+
+    private lateinit var movie: MovieJson
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        movie = arguments?.getParcelable(ARG_MOVIE)
+            ?: throw IllegalArgumentException("missing argument!")
     }
 
     override fun onCreateView(
@@ -48,42 +46,45 @@ class DetailsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_details_constraint, container, false)
+        return inflater.inflate(R.layout.fragment_movie_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val title = arguments?.getInt(DetailsActivity.MOVIE_TITLE, 0)
-        val description = arguments?.getInt(DetailsActivity.MOVIE_DESCRIPTION, 0)
-        val image = arguments?.getInt(DetailsActivity.MOVIE_IMAGE, 0)
-        val url = arguments?.getInt(DetailsActivity.MOVIE_URL, 0)
-        //TODO Strange construction here
-        if (title == null || description == null || image == null || url == null) {
-            throw IllegalArgumentException("Missing argument")
+        with(movie) {
+            ivBackground.load(ApiConstants.BACKDROP_BASE_URL + backdropPath)
+            ivPoster.load(ApiConstants.POSTER_BASE_URL + posterPath)
+            tvTitle.text = title
+            tvReleasedDate.text = releaseDate
+            tvOverview.text = formatDescription()
         }
-        if (title == 0 || description == 0 || image == 0 || url == 0) {
-            throw IllegalArgumentException("Missing argument")
+
+        btnTrailer.setOnClickListener {
+            RestService.api.getMovieVideos(movie.id)
+                .enqueue(object : Callback<MovieVideosResponse?> {
+                    override fun onFailure(call: Call<MovieVideosResponse?>, t: Throwable) {
+                        Toast.makeText(
+                            requireContext(),
+                            t.message ?: "failed to load trailer",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+
+                    override fun onResponse(
+                        call: Call<MovieVideosResponse?>,
+                        response: Response<MovieVideosResponse?>
+                    ) {
+                        response.body()?.videos?.first()?.let {
+                            openMovieTrailer(ApiConstants.YOUTUBE_BASE_URL + it.key)
+                        }
+                    }
+                })
         }
-        txt_top_title.setText(title)
-        txt_small_right.setText(R.string.unknown)
-        txt_bottom.setText(description)
-        img_center.setImageResource(image)
-
-        view.findViewById<Button>(R.id.btn_to_movie).setOnClickListener(View.OnClickListener {
-            if (url != null) {
-                GoToUrlHelper.gotoUrl(
-                    view.context, url
-                )
-            }
-        })
-
     }
 
     private fun openMovieTrailer(url: String) {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
     }
-
-
 }
