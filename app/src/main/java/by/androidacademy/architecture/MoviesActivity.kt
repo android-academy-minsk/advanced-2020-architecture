@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import by.androidacademy.architecture.adapters.MoviesAdapter
 import by.androidacademy.architecture.datasource.MoviesDataSourceProvider
 import by.androidacademy.architecture.datasource.Result
+import by.androidacademy.architecture.extensions.doOnQueryTextChange
 import kotlinx.android.synthetic.main.activity_movies_list.*
 
 class MoviesActivity : AppCompatActivity() {
@@ -32,16 +33,10 @@ class MoviesActivity : AppCompatActivity() {
         val searchItem = menu?.findItem(R.id.appSearchBar)
         (searchItem?.actionView as? SearchView)?.let { searchView ->
             searchView.queryHint = "Search"
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    showMoviesStartWith(newText.orEmpty())
-                    return true
-                }
-            })
+            searchView.doOnQueryTextChange { newText ->
+                showMoviesStartWith(newText.orEmpty())
+                return@doOnQueryTextChange true
+            }
         }
 
         return super.onCreateOptionsMenu(menu)
