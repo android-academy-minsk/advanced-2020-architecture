@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.androidacademy.architecture.R
-import by.androidacademy.architecture.api.response.MovieJson
+import by.androidacademy.architecture.model.Movie
 
 class MoviesAdapter(private val clickListener: (itemPosition: Int) -> Unit) :
     RecyclerView.Adapter<MovieViewHolder>() {
 
-    private var movies: List<MovieJson> = emptyList()
+    private var movies: List<Movie> = emptyList()
 
-    fun setMovies(movies: List<MovieJson>) {
+    fun setMovies(movies: List<Movie>) {
         this.movies = movies
         notifyDataSetChanged()
     }

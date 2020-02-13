@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import by.androidacademy.architecture.adapters.MoviesAdapter
 import by.androidacademy.architecture.api.RestService
 import by.androidacademy.architecture.api.response.PopularMoviesResponse
+import by.androidacademy.architecture.mappers.MovieMapper
 import by.androidacademy.architecture.store.MoviesStore
 import kotlinx.android.synthetic.main.activity_movies_list.*
 import retrofit2.Call
@@ -18,6 +19,8 @@ import retrofit2.Response
 class MoviesActivity : AppCompatActivity() {
 
     private lateinit var adapter: MoviesAdapter
+
+    private val movieMapper = MovieMapper()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,12 +101,14 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     private fun showAllMovies() {
-        val movies = MoviesStore.getMovies()
+        val movies = MoviesStore.getMovies().map { movieMapper.map(it) }
         adapter.setMovies(movies)
     }
 
     private fun showMoviesStartWith(query: String) {
-        val movies = MoviesStore.getMovies().filter { it.title.startsWith(query, true) }
+        val movies = MoviesStore.getMovies()
+            .filter { it.title.startsWith(query, true) }
+            .map { movieMapper.map(it) }
         adapter.setMovies(movies)
     }
 

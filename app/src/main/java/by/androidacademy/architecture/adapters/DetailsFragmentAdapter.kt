@@ -4,11 +4,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import by.androidacademy.architecture.DetailsFragment
-import by.androidacademy.architecture.api.response.MovieJson
+import by.androidacademy.architecture.model.Movie
 
 class DetailsFragmentAdapter(
     fragmentManager: FragmentManager,
-    private val movies: List<MovieJson>
+    private val movies: List<Movie>
 ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {

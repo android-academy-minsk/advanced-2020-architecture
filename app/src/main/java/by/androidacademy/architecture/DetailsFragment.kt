@@ -11,9 +11,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.androidacademy.architecture.api.ApiConstants
 import by.androidacademy.architecture.api.RestService
-import by.androidacademy.architecture.api.response.MovieJson
 import by.androidacademy.architecture.api.response.MovieVideosResponse
 import by.androidacademy.architecture.formatters.MovieDescriptionFormatter
+import by.androidacademy.architecture.model.Movie
 import coil.api.load
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import retrofit2.Call
@@ -26,16 +26,16 @@ class DetailsFragment : Fragment() {
 
         private const val ARG_MOVIE = "arg.movie"
 
-        fun newInstance(movie: MovieJson): DetailsFragment {
+        fun newInstance(movie: Movie): DetailsFragment {
             return DetailsFragment().apply {
                 arguments = bundleOf(ARG_MOVIE to movie)
             }
         }
     }
 
-    private lateinit var movie: MovieJson
+    private lateinit var movie: Movie
 
-    private val desctiptionFormatter = MovieDescriptionFormatter()
+    private val descriptionFormatter = MovieDescriptionFormatter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,11 +56,11 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(movie) {
-            ivBackground.load(ApiConstants.BACKDROP_BASE_URL + backdropPath)
-            ivPoster.load(ApiConstants.POSTER_BASE_URL + posterPath)
+            ivBackground.load(backdropUrl)
+            ivPoster.load(posterUrl)
             tvTitle.text = title
             tvReleasedDate.text = releaseDate
-            tvOverview.text = desctiptionFormatter.format(this)
+            tvOverview.text = descriptionFormatter.format(this)
         }
 
         btnTrailer.setOnClickListener {

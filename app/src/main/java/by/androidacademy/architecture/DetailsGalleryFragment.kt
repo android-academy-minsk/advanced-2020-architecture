@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import by.androidacademy.architecture.adapters.DetailsFragmentAdapter
+import by.androidacademy.architecture.mappers.MovieMapper
 import by.androidacademy.architecture.store.MoviesStore
 import kotlinx.android.synthetic.main.fragment_movies_gallery.*
 
@@ -23,6 +24,8 @@ class DetailsGalleryFragment : Fragment() {
         }
     }
 
+    private val movieMapper = MovieMapper()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,7 +38,7 @@ class DetailsGalleryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val position = arguments?.getInt(ARGS_MOVIE_POSITION) ?: 0
-        val movies = MoviesStore.getMovies()
+        val movies = MoviesStore.getMovies().map { movieMapper.map(it) }
 
         vp_pager.run {
             adapter = DetailsFragmentAdapter(childFragmentManager, movies)
