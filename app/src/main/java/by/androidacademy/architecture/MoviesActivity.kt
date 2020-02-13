@@ -7,20 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import by.androidacademy.architecture.adapters.MoviesAdapter
-import by.androidacademy.architecture.api.RestService
-import by.androidacademy.architecture.api.response.PopularMoviesResponse
-import by.androidacademy.architecture.mappers.MovieMapper
-import by.androidacademy.architecture.store.MoviesStore
+import by.androidacademy.architecture.datasource.MoviesDataSourceProvider
+import by.androidacademy.architecture.datasource.Result
 import kotlinx.android.synthetic.main.activity_movies_list.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class MoviesActivity : AppCompatActivity() {
 
     private lateinit var adapter: MoviesAdapter
 
-    private val movieMapper = MovieMapper()
+    private val dataSourceProvider = MoviesDataSourceProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +38,7 @@ class MoviesActivity : AppCompatActivity() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if (newText.isNullOrBlank()) {
-                        showAllMovies()
-                    } else {
-                        showMoviesStartWith(newText)
-                    }
+                    showMoviesStartWith(newText.orEmpty())
                     return true
                 }
             })
@@ -59,35 +50,23 @@ class MoviesActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        if (MoviesStore.getMovies().isEmpty()) {
-            loadMovies()
-        } else {
-            showAllMovies()
-        }
-    }
-
-    private fun loadMovies() {
         showProgress()
-        RestService.api.getPopularMovies().enqueue(object : Callback<PopularMoviesResponse?> {
-            override fun onFailure(call: Call<PopularMoviesResponse?>, t: Throwable) {
-                Toast.makeText(
-                    applicationContext,
-                    t.message ?: "something went wrong",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-
-            override fun onResponse(
-                call: Call<PopularMoviesResponse?>,
-                response: Response<PopularMoviesResponse?>
-            ) {
-                response.body()?.movies.orEmpty().also {
-                    MoviesStore.putMovies(it)
-                    hideProgress()
-                    showAllMovies()
+        dataSourceProvider.getDataSource(true)
+            .getMovies { result ->
+                when (result) {
+                    is Result.Success -> {
+                        hideProgress()
+                        adapter.setMovies(result.movies)
+                    }
+                    is Result.Error -> {
+                        Toast.makeText(
+                            applicationContext,
+                            result.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
-        })
     }
 
     private fun showProgress() {
@@ -100,16 +79,22 @@ class MoviesActivity : AppCompatActivity() {
         recycler.isVisible = true
     }
 
-    private fun showAllMovies() {
-        val movies = MoviesStore.getMovies().map { movieMapper.map(it) }
-        adapter.setMovies(movies)
-    }
-
     private fun showMoviesStartWith(query: String) {
-        val movies = MoviesStore.getMovies()
-            .filter { it.title.startsWith(query, true) }
-            .map { movieMapper.map(it) }
-        adapter.setMovies(movies)
+        dataSourceProvider.getDataSource(false)
+            .getMoviesStartWith(query) { result ->
+                when (result) {
+                    is Result.Success -> {
+                        adapter.setMovies(result.movies)
+                    }
+                    is Result.Error -> {
+                        Toast.makeText(
+                            applicationContext,
+                            result.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
     }
 
     private fun showDetailsFragment(selectedItemPosition: Int) {
