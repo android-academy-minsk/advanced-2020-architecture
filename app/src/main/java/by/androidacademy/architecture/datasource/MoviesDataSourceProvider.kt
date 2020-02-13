@@ -1,9 +1,9 @@
 package by.androidacademy.architecture.datasource
 
-class MoviesDataSourceProvider {
-
-    private val onlineDataSource: MoviesDataSource = ApiDataSource()
-    private val localDataSource: MoviesDataSource = LocalDataSource()
+class MoviesDataSourceProvider(
+    private val onlineDataSource: MoviesDataSource,
+    private val localDataSource: MoviesDataSource
+) {
 
     fun getDataSource(online: Boolean): MoviesDataSource {
         return if (online) {

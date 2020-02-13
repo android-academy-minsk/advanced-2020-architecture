@@ -16,7 +16,10 @@ class MoviesActivity : AppCompatActivity() {
 
     private lateinit var adapter: MoviesAdapter
 
-    private val dataSourceProvider = MoviesDataSourceProvider()
+    private val dataSourceProvider = MoviesDataSourceProvider(
+        Dependencies.onlineDataSource,
+        Dependencies.localDataSource
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
