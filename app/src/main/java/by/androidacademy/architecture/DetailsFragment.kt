@@ -13,6 +13,7 @@ import by.androidacademy.architecture.api.ApiConstants
 import by.androidacademy.architecture.api.RestService
 import by.androidacademy.architecture.api.response.MovieJson
 import by.androidacademy.architecture.api.response.MovieVideosResponse
+import by.androidacademy.architecture.formatters.MovieDescriptionFormatter
 import coil.api.load
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 import retrofit2.Call
@@ -33,6 +34,8 @@ class DetailsFragment : Fragment() {
     }
 
     private lateinit var movie: MovieJson
+
+    private val desctiptionFormatter = MovieDescriptionFormatter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,7 @@ class DetailsFragment : Fragment() {
             ivPoster.load(ApiConstants.POSTER_BASE_URL + posterPath)
             tvTitle.text = title
             tvReleasedDate.text = releaseDate
-            tvOverview.text = formatDescription()
+            tvOverview.text = desctiptionFormatter.format(this)
         }
 
         btnTrailer.setOnClickListener {

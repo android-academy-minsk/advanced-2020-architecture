@@ -1,11 +1,7 @@
 package by.androidacademy.architecture.api.response
 
-import android.graphics.Color
 import android.os.Parcel
 import android.os.Parcelable
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.style.BackgroundColorSpan
 import com.google.gson.annotations.SerializedName
 
 data class MovieJson(
@@ -22,17 +18,6 @@ data class MovieJson(
     @SerializedName("backdrop_path")
     val backdropPath: String
 ) : Parcelable {
-
-    fun formatDescription(): Spannable {
-        return SpannableStringBuilder(overview).apply {
-            setSpan(
-                BackgroundColorSpan(Color.CYAN),
-                0,
-                overview.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
-    }
 
     constructor(source: Parcel) : this(
         source.readInt(),
