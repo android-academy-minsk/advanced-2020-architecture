@@ -9,7 +9,8 @@ data class Movie(
     val description: String,
     val releaseDate: String,
     val posterUrl: String,
-    val backdropUrl: String
+    val backdropUrl: String,
+    val rating: Float
 ) : Parcelable {
 
     constructor(source: Parcel) : this(
@@ -18,7 +19,8 @@ data class Movie(
         source.readString().orEmpty(),
         source.readString().orEmpty(),
         source.readString().orEmpty(),
-        source.readString().orEmpty()
+        source.readString().orEmpty(),
+        source.readFloat()
     )
 
     override fun describeContents() = 0
@@ -30,6 +32,7 @@ data class Movie(
         writeString(releaseDate)
         writeString(posterUrl)
         writeString(backdropUrl)
+        writeFloat(rating)
     }
 
     companion object {

@@ -11,6 +11,7 @@ import by.androidacademy.architecture.domain.mappers.Mapper
 class MoviesRepositoryImpl(
     private val onlineDataSource: MoviesDataSource,
     private val localDataSource: MoviesDataSource,
+    private val ratingsDataSource: RatingsDataSource,
     private val movieMapper: Mapper<MovieJson, Movie>,
     private val movieVideoMapper: Mapper<MovieVideoJson, MovieVideo>
 ) : MoviesRepository {
@@ -20,7 +21,10 @@ class MoviesRepositoryImpl(
         dataSource.getMovies { result ->
             when (result) {
                 is MoviesResult.Success -> {
-                    val movies = result.movies.map { movieMapper.map(it) }
+                    val movies = result.movies.map { movieJson ->
+                        val rating = ratingsDataSource.getRating(movieJson.id)
+                        movieMapper.map(movieJson).copy(rating = rating)
+                    }
                     callback.onSuccess(movies)
                 }
                 is MoviesResult.Error -> {
@@ -35,7 +39,10 @@ class MoviesRepositoryImpl(
         dataSource.getMoviesStartWith(query) { result ->
             when (result) {
                 is MoviesResult.Success -> {
-                    val movies = result.movies.map { movieMapper.map(it) }
+                    val movies = result.movies.map {movieJson ->
+                        val rating = ratingsDataSource.getRating(movieJson.id)
+                        movieMapper.map(movieJson).copy(rating = rating)
+                    }
                     callback.onSuccess(movies)
                 }
                 is MoviesResult.Error -> {

@@ -16,7 +16,8 @@ class MovieMapper : Mapper<MovieJson, Movie> {
                 description = overview,
                 releaseDate = releaseDate,
                 posterUrl = ApiConstants.POSTER_BASE_URL + posterPath,
-                backdropUrl = ApiConstants.BACKDROP_BASE_URL + backdropPath
+                backdropUrl = ApiConstants.BACKDROP_BASE_URL + backdropPath,
+                rating = 0.0f
             )
         }
     }
