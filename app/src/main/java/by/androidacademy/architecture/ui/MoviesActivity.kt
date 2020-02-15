@@ -6,12 +6,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import by.androidacademy.architecture.Dependencies
 import by.androidacademy.architecture.R
+import by.androidacademy.architecture.presentation.MoviesViewModel
+import by.androidacademy.architecture.presentation.MoviesViewModelFactory
 import by.androidacademy.architecture.ui.adapters.MoviesAdapter
-import by.androidacademy.architecture.domain.usecase.GetMoviesByQueryUseCase
-import by.androidacademy.architecture.domain.usecase.GetMoviesResult
-import by.androidacademy.architecture.domain.usecase.GetPopularMoviesUseCase
 import by.androidacademy.architecture.ui.extensions.doOnQueryTextChange
 import kotlinx.android.synthetic.main.activity_movies_list.*
 
@@ -19,11 +20,9 @@ class MoviesActivity : AppCompatActivity() {
 
     private lateinit var adapter: MoviesAdapter
 
-    private val getPopularMoviesUseCase: GetPopularMoviesUseCase =
-        Dependencies.getPopularMoviesUseCase
+    private val viewModelFactory: MoviesViewModelFactory = Dependencies.moviesViewModelFactory
 
-    private val getMoviesByQueryUseCase: GetMoviesByQueryUseCase =
-        Dependencies.getMoviesByQueryUseCase
+    private lateinit var viewModel: MoviesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +32,22 @@ class MoviesActivity : AppCompatActivity() {
             showDetailsFragment(itemPosition)
         }
         recycler.adapter = adapter
+
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MoviesViewModel::class.java)
+
+        showProgress()
+        initViewModelObservers()
+    }
+
+    private fun initViewModelObservers() {
+        viewModel.moviesLiveData.observe(this, Observer { movies ->
+            hideProgress()
+            adapter.setMovies(movies)
+        })
+        viewModel.errorLiveData.observe(this, Observer { message ->
+            Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,28 +64,6 @@ class MoviesActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        showProgress()
-        getPopularMoviesUseCase
-            .getMovies { result ->
-                when (result) {
-                    is GetMoviesResult.Success -> {
-                        hideProgress()
-                        adapter.setMovies(result.movies)
-                    }
-                    is GetMoviesResult.Error -> {
-                        Toast.makeText(
-                            applicationContext,
-                            result.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
-    }
-
     private fun showProgress() {
         progress.show()
         recycler.isVisible = false
@@ -82,21 +75,7 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     private fun showMoviesStartWith(query: String) {
-        getMoviesByQueryUseCase
-            .getMovies(query) { result ->
-                when (result) {
-                    is GetMoviesResult.Success -> {
-                        adapter.setMovies(result.movies)
-                    }
-                    is GetMoviesResult.Error -> {
-                        Toast.makeText(
-                            applicationContext,
-                            result.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
+        viewModel.search(query)
     }
 
     private fun showDetailsFragment(selectedItemPosition: Int) {

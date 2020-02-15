@@ -8,9 +8,16 @@ import by.androidacademy.architecture.data.mappers.MovieMapper
 import by.androidacademy.architecture.data.mappers.MovieVideoMapper
 import by.androidacademy.architecture.domain.MoviesRepository
 import by.androidacademy.architecture.domain.usecase.*
+import by.androidacademy.architecture.presentation.MoviesViewModelFactory
 
 object Dependencies {
 
+    // Presentation
+    val moviesViewModelFactory by lazy {
+        createMoviesViewModelFactory(getPopularMoviesUseCase, getMoviesByQueryUseCase)
+    }
+
+    // Domain
     val getPopularMoviesUseCase by lazy {
         createGetPopularMoviesUseCase(moviesRepository)
     }
@@ -27,12 +34,21 @@ object Dependencies {
         createMoviesRepository(onlineDataSource, localDataSource)
     }
 
+    // Data
     val onlineDataSource by lazy {
         createOnlineDataSource()
     }
 
     val localDataSource by lazy {
         createLocalDataSource()
+    }
+
+    // Impls
+    private fun createMoviesViewModelFactory(
+        getPopularMoviesUseCase: GetPopularMoviesUseCase,
+        getMoviesByQueryUseCase: GetMoviesByQueryUseCase
+    ): MoviesViewModelFactory {
+        return MoviesViewModelFactory(getPopularMoviesUseCase, getMoviesByQueryUseCase)
     }
 
     private fun createGetPopularMoviesUseCase(moviesRepository: MoviesRepository): GetPopularMoviesUseCase {
