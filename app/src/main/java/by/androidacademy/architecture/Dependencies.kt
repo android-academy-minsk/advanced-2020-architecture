@@ -2,8 +2,10 @@ package by.androidacademy.architecture
 
 import by.androidacademy.architecture.api.ApiDataSource
 import by.androidacademy.architecture.cache.LocalDataSource
+import by.androidacademy.architecture.cache.LocalRatingsDataSource
 import by.androidacademy.architecture.data.MoviesRepositoryImpl
 import by.androidacademy.architecture.data.MoviesDataSource
+import by.androidacademy.architecture.data.RatingsDataSource
 import by.androidacademy.architecture.data.mappers.MovieMapper
 import by.androidacademy.architecture.data.mappers.MovieVideoMapper
 import by.androidacademy.architecture.domain.MoviesRepository
@@ -37,7 +39,7 @@ object Dependencies {
     }
 
     val moviesRepository by lazy {
-        createMoviesRepository(onlineDataSource, localDataSource)
+        createMoviesRepository(onlineDataSource, localDataSource, createRatingsDataSource())
     }
 
     // Data
@@ -47,6 +49,10 @@ object Dependencies {
 
     val localDataSource by lazy {
         createLocalDataSource()
+    }
+
+    fun createRatingsDataSource(): RatingsDataSource {
+        return LocalRatingsDataSource(MoviesApp.instance)
     }
 
     // Impls
@@ -71,11 +77,13 @@ object Dependencies {
 
     private fun createMoviesRepository(
         onlineDataSource: MoviesDataSource,
-        localDataSource: MoviesDataSource
+        localDataSource: MoviesDataSource,
+        ratingsDataSource: RatingsDataSource
     ): MoviesRepository {
         return MoviesRepositoryImpl(
             onlineDataSource = onlineDataSource,
             localDataSource = localDataSource,
+            ratingsDataSource = ratingsDataSource,
             movieMapper = MovieMapper(),
             movieVideoMapper = MovieVideoMapper()
         )
