@@ -58,4 +58,8 @@ class MoviesRepositoryImpl(
             callback(movie)
         }
     }
+
+    override fun setMovieRating(movieId: Int, rating: Float) {
+        ratingsDataSource.setRating(movieId, rating)
+    }
 }

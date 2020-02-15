@@ -38,6 +38,10 @@ object Dependencies {
         createGetMovieTrailerUseCase(moviesRepository)
     }
 
+    val rateMovieUseCase by lazy {
+        createRateMovieUseCase(moviesRepository)
+    }
+
     val moviesRepository by lazy {
         createMoviesRepository(onlineDataSource, localDataSource, createRatingsDataSource())
     }
@@ -73,6 +77,10 @@ object Dependencies {
 
     private fun createGetMovieTrailerUseCase(moviesRepository: MoviesRepository): GetMovieTrailerUseCase {
         return GetMovieTrailerUseCaseImpl(moviesRepository)
+    }
+
+    private fun createRateMovieUseCase(moviesRepository: MoviesRepository): RateMovieUseCase {
+        return RateMovieUseCaseImpl(moviesRepository)
     }
 
     private fun createMoviesRepository(
