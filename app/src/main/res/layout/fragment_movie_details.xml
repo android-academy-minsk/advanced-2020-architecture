@@ -74,6 +74,13 @@
                 app:layout_constraintStart_toEndOf="@id/tvReleased"
                 tools:text="@tools:sample/date/mmddyy" />
 
+        <RatingBar
+                android:id="@+id/viewRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/tvReleased"
+                app:layout_constraintTop_toBottomOf="@id/tvReleased" />
+
         <Button
                 android:id="@+id/btnTrailer"
                 android:layout_width="wrap_content"
@@ -81,8 +88,8 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginTop="16dp"
                 android:text="@string/button_movie_trailer"
-                app:layout_constraintStart_toStartOf="@id/tvReleased"
-                app:layout_constraintTop_toBottomOf="@id/tvReleased" />
+                app:layout_constraintStart_toStartOf="@id/viewRating"
+                app:layout_constraintTop_toBottomOf="@id/viewRating" />
 
         <TextView
                 android:id="@+id/tvOverview"
