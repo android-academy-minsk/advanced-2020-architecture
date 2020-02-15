@@ -22,7 +22,7 @@ object Dependencies {
     }
 
     fun createMovieDetailsViewModelFactory(movie: Movie): MovieDetailsViewModelFactory {
-        return MovieDetailsViewModelFactory(movie, getMovieTrailerUseCase)
+        return MovieDetailsViewModelFactory(movie, getMovieTrailerUseCase, rateMovieUseCase)
     }
 
     // Domain

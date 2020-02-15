@@ -53,6 +53,11 @@ class DetailsFragment : Fragment(R.layout.fragment_movie_details) {
         btnTrailer.setOnClickListener {
             viewModel.loadTrailer()
         }
+        viewRating.setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
+            if (fromUser) {
+                viewModel.rate(rating)
+            }
+        }
     }
 
     private fun initViewModelObservers() {
@@ -63,6 +68,7 @@ class DetailsFragment : Fragment(R.layout.fragment_movie_details) {
                 tvTitle.text = title
                 tvReleasedDate.text = releaseDate
                 tvOverview.text = descriptionFormatter.format(this)
+                viewRating.rating = rating
             }
         })
         viewModel.movieTrailerLiveData.observe(viewLifecycleOwner, Observer { movieVideo ->

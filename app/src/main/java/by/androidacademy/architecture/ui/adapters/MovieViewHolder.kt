@@ -14,6 +14,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
                 tvTitle.text = title
                 tvOverview.text = description
                 ivPoster.load(posterUrl)
+                viewRating.rating = rating
             }
             setOnClickListener { onClick() }
         }

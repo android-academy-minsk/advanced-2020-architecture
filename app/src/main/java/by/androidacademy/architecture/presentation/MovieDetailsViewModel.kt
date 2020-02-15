@@ -7,10 +7,12 @@ import by.androidacademy.architecture.domain.model.Movie
 import by.androidacademy.architecture.domain.model.MovieVideo
 import by.androidacademy.architecture.domain.usecase.GetMovieTrailerUseCase
 import by.androidacademy.architecture.domain.usecase.GetTrailerResult
+import by.androidacademy.architecture.domain.usecase.RateMovieUseCase
 
 class MovieDetailsViewModel(
     private val movie: Movie,
-    private val getMovieTrailerUseCase: GetMovieTrailerUseCase
+    private val getMovieTrailerUseCase: GetMovieTrailerUseCase,
+    private val rateMovieUseCase: RateMovieUseCase
 ) : ViewModel() {
 
     private val _movieLivaData = MutableLiveData<Movie>()
@@ -37,5 +39,9 @@ class MovieDetailsViewModel(
                 }
             }
         }
+    }
+
+    fun rate(rating: Float) {
+        rateMovieUseCase.rate(movie, rating)
     }
 }
