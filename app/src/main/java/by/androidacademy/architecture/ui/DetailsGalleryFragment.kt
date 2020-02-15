@@ -41,7 +41,8 @@ class DetailsGalleryFragment : Fragment(R.layout.fragment_movies_gallery) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val position = arguments?.getInt(ARGS_MOVIE_POSITION) ?: 0
+        val position = savedInstanceState
+            ?.getInt(ARGS_MOVIE_POSITION) ?: arguments?.getInt(ARGS_MOVIE_POSITION) ?: 0
 
         viewModel.moviesLiveData.observe(viewLifecycleOwner, Observer { movies ->
             vp_pager.run {
@@ -52,5 +53,10 @@ class DetailsGalleryFragment : Fragment(R.layout.fragment_movies_gallery) {
         viewModel.errorLiveData.observe(viewLifecycleOwner, Observer { message ->
             Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putInt(ARGS_MOVIE_POSITION, vp_pager.currentItem)
+        super.onSaveInstanceState(outState)
     }
 }
