@@ -1,4 +1,4 @@
-package by.androidacademy.architecture
+package by.androidacademy.architecture.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -9,16 +9,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import by.androidacademy.architecture.api.ApiConstants
-import by.androidacademy.architecture.api.RestService
-import by.androidacademy.architecture.api.response.MovieVideosResponse
-import by.androidacademy.architecture.formatters.MovieDescriptionFormatter
-import by.androidacademy.architecture.model.Movie
+import by.androidacademy.architecture.Dependencies
+import by.androidacademy.architecture.R
+import by.androidacademy.architecture.domain.model.Movie
+import by.androidacademy.architecture.domain.usecase.GetMovieTrailerUseCase
+import by.androidacademy.architecture.domain.usecase.GetTrailerResult
+import by.androidacademy.architecture.ui.formatters.MovieDescriptionFormatter
 import coil.api.load
 import kotlinx.android.synthetic.main.fragment_movie_details.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DetailsFragment : Fragment() {
 
@@ -35,6 +33,8 @@ class DetailsFragment : Fragment() {
 
     private lateinit var movie: Movie
 
+    private val getMovieTrailerUseCase: GetMovieTrailerUseCase =
+        Dependencies.getMovieTrailerUseCase
     private val descriptionFormatter = MovieDescriptionFormatter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,25 +64,20 @@ class DetailsFragment : Fragment() {
         }
 
         btnTrailer.setOnClickListener {
-            RestService.api.getMovieVideos(movie.id)
-                .enqueue(object : Callback<MovieVideosResponse?> {
-                    override fun onFailure(call: Call<MovieVideosResponse?>, t: Throwable) {
+            getMovieTrailerUseCase.getTrailer(movie.id) { result ->
+                when (result) {
+                    is GetTrailerResult.Success -> {
+                        openMovieTrailer(result.movieVideo.videoUrl)
+                    }
+                    is GetTrailerResult.Error -> {
                         Toast.makeText(
                             requireContext(),
-                            t.message ?: "failed to load trailer",
+                            result.message,
                             Toast.LENGTH_LONG
                         ).show()
                     }
-
-                    override fun onResponse(
-                        call: Call<MovieVideosResponse?>,
-                        response: Response<MovieVideosResponse?>
-                    ) {
-                        response.body()?.videos?.first()?.let {
-                            openMovieTrailer(ApiConstants.YOUTUBE_BASE_URL + it.key)
-                        }
-                    }
-                })
+                }
+            }
         }
     }
 

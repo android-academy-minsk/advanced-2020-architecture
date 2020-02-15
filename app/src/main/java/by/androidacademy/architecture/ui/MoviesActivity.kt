@@ -1,4 +1,4 @@
-package by.androidacademy.architecture
+package by.androidacademy.architecture.ui
 
 import android.os.Bundle
 import android.view.Menu
@@ -6,20 +6,24 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
-import by.androidacademy.architecture.adapters.MoviesAdapter
-import by.androidacademy.architecture.datasource.MoviesDataSourceProvider
-import by.androidacademy.architecture.datasource.Result
-import by.androidacademy.architecture.extensions.doOnQueryTextChange
+import by.androidacademy.architecture.Dependencies
+import by.androidacademy.architecture.R
+import by.androidacademy.architecture.ui.adapters.MoviesAdapter
+import by.androidacademy.architecture.domain.usecase.GetMoviesByQueryUseCase
+import by.androidacademy.architecture.domain.usecase.GetMoviesResult
+import by.androidacademy.architecture.domain.usecase.GetPopularMoviesUseCase
+import by.androidacademy.architecture.ui.extensions.doOnQueryTextChange
 import kotlinx.android.synthetic.main.activity_movies_list.*
 
 class MoviesActivity : AppCompatActivity() {
 
     private lateinit var adapter: MoviesAdapter
 
-    private val dataSourceProvider = MoviesDataSourceProvider(
-        Dependencies.onlineDataSource,
-        Dependencies.localDataSource
-    )
+    private val getPopularMoviesUseCase: GetPopularMoviesUseCase =
+        Dependencies.getPopularMoviesUseCase
+
+    private val getMoviesByQueryUseCase: GetMoviesByQueryUseCase =
+        Dependencies.getMoviesByQueryUseCase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,14 +53,14 @@ class MoviesActivity : AppCompatActivity() {
         super.onResume()
 
         showProgress()
-        dataSourceProvider.getDataSource(true)
+        getPopularMoviesUseCase
             .getMovies { result ->
                 when (result) {
-                    is Result.Success -> {
+                    is GetMoviesResult.Success -> {
                         hideProgress()
                         adapter.setMovies(result.movies)
                     }
-                    is Result.Error -> {
+                    is GetMoviesResult.Error -> {
                         Toast.makeText(
                             applicationContext,
                             result.message,
@@ -78,13 +82,13 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     private fun showMoviesStartWith(query: String) {
-        dataSourceProvider.getDataSource(false)
-            .getMoviesStartWith(query) { result ->
+        getMoviesByQueryUseCase
+            .getMovies(query) { result ->
                 when (result) {
-                    is Result.Success -> {
+                    is GetMoviesResult.Success -> {
                         adapter.setMovies(result.movies)
                     }
-                    is Result.Error -> {
+                    is GetMoviesResult.Error -> {
                         Toast.makeText(
                             applicationContext,
                             result.message,
@@ -96,7 +100,10 @@ class MoviesActivity : AppCompatActivity() {
     }
 
     private fun showDetailsFragment(selectedItemPosition: Int) {
-        val detailsFragment = DetailsGalleryFragment.newInstance(selectedItemPosition)
+        val detailsFragment =
+            DetailsGalleryFragment.newInstance(
+                selectedItemPosition
+            )
         supportFragmentManager
             .beginTransaction()
             .addToBackStack(null)

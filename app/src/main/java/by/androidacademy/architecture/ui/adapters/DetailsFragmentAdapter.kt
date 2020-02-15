@@ -1,10 +1,10 @@
-package by.androidacademy.architecture.adapters
+package by.androidacademy.architecture.ui.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import by.androidacademy.architecture.DetailsFragment
-import by.androidacademy.architecture.model.Movie
+import by.androidacademy.architecture.ui.DetailsFragment
+import by.androidacademy.architecture.domain.model.Movie
 
 class DetailsFragmentAdapter(
     fragmentManager: FragmentManager,

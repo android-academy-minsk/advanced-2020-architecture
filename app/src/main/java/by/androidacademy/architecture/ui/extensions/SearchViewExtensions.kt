@@ -1,4 +1,4 @@
-package by.androidacademy.architecture.extensions
+package by.androidacademy.architecture.ui.extensions
 
 import androidx.appcompat.widget.SearchView
 

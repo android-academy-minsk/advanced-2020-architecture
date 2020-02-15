@@ -1,4 +1,4 @@
-package by.androidacademy.architecture.store
+package by.androidacademy.architecture.cache
 
 import by.androidacademy.architecture.api.response.MovieJson
 

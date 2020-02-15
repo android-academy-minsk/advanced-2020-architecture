@@ -1,10 +1,10 @@
-package by.androidacademy.architecture.formatters
+package by.androidacademy.architecture.ui.formatters
 
 import android.graphics.Color
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BackgroundColorSpan
-import by.androidacademy.architecture.model.Movie
+import by.androidacademy.architecture.domain.model.Movie
 
 class MovieDescriptionFormatter {
 

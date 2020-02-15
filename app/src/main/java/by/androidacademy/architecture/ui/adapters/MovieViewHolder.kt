@@ -1,8 +1,8 @@
-package by.androidacademy.architecture.adapters
+package by.androidacademy.architecture.ui.adapters
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import by.androidacademy.architecture.model.Movie
+import by.androidacademy.architecture.domain.model.Movie
 import coil.api.load
 import kotlinx.android.synthetic.main.item_movie.view.*
 

@@ -1,4 +1,4 @@
-package by.androidacademy.architecture.model
+package by.androidacademy.architecture.domain.model
 
 import android.os.Parcel
 import android.os.Parcelable

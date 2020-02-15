@@ -1,4 +1,4 @@
-package by.androidacademy.architecture.mappers
+package by.androidacademy.architecture.domain.mappers
 
 interface Mapper<From, To> {
 

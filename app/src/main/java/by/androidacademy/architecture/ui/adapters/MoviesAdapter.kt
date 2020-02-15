@@ -1,10 +1,10 @@
-package by.androidacademy.architecture.adapters
+package by.androidacademy.architecture.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import by.androidacademy.architecture.R
-import by.androidacademy.architecture.model.Movie
+import by.androidacademy.architecture.domain.model.Movie
 
 class MoviesAdapter(private val clickListener: (itemPosition: Int) -> Unit) :
     RecyclerView.Adapter<MovieViewHolder>() {
