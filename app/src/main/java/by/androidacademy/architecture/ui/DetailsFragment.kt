@@ -3,22 +3,21 @@ package by.androidacademy.architecture.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import by.androidacademy.architecture.Dependencies
 import by.androidacademy.architecture.R
 import by.androidacademy.architecture.domain.model.Movie
-import by.androidacademy.architecture.domain.usecase.GetMovieTrailerUseCase
-import by.androidacademy.architecture.domain.usecase.GetTrailerResult
+import by.androidacademy.architecture.presentation.MovieDetailsViewModel
 import by.androidacademy.architecture.ui.formatters.MovieDescriptionFormatter
 import coil.api.load
 import kotlinx.android.synthetic.main.fragment_movie_details.*
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(R.layout.fragment_movie_details) {
 
     companion object {
 
@@ -31,54 +30,47 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private lateinit var movie: Movie
+    private lateinit var viewModel: MovieDetailsViewModel
 
-    private val getMovieTrailerUseCase: GetMovieTrailerUseCase =
-        Dependencies.getMovieTrailerUseCase
     private val descriptionFormatter = MovieDescriptionFormatter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        movie = arguments?.getParcelable(ARG_MOVIE)
+        val movie: Movie = arguments?.getParcelable(ARG_MOVIE)
             ?: throw IllegalArgumentException("missing argument!")
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_movie_details, container, false)
+        val viewModelFactory = Dependencies.createMovieDetailsViewModelFactory(movie)
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MovieDetailsViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        with(movie) {
-            ivBackground.load(backdropUrl)
-            ivPoster.load(posterUrl)
-            tvTitle.text = title
-            tvReleasedDate.text = releaseDate
-            tvOverview.text = descriptionFormatter.format(this)
-        }
+        initViewModelObservers()
 
         btnTrailer.setOnClickListener {
-            getMovieTrailerUseCase.getTrailer(movie.id) { result ->
-                when (result) {
-                    is GetTrailerResult.Success -> {
-                        openMovieTrailer(result.movieVideo.videoUrl)
-                    }
-                    is GetTrailerResult.Error -> {
-                        Toast.makeText(
-                            requireContext(),
-                            result.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                }
-            }
+            viewModel.loadTrailer()
         }
+    }
+
+    private fun initViewModelObservers() {
+        viewModel.movieLiveData.observe(viewLifecycleOwner, Observer { movie ->
+            with(movie) {
+                ivBackground.load(backdropUrl)
+                ivPoster.load(posterUrl)
+                tvTitle.text = title
+                tvReleasedDate.text = releaseDate
+                tvOverview.text = descriptionFormatter.format(this)
+            }
+        })
+        viewModel.movieTrailerLiveData.observe(viewLifecycleOwner, Observer { movieVideo ->
+            openMovieTrailer(movieVideo.videoUrl)
+        })
+        viewModel.errorLiveData.observe(viewLifecycleOwner, Observer { message ->
+            Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        })
     }
 
     private fun openMovieTrailer(url: String) {
