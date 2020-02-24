@@ -2,11 +2,11 @@ package by.androidacademy.architecture.data
 
 import by.androidacademy.architecture.api.response.MovieJson
 import by.androidacademy.architecture.api.response.MovieVideoJson
+import by.androidacademy.architecture.data.mappers.Mapper
 import by.androidacademy.architecture.domain.MoviesRepository
 import by.androidacademy.architecture.domain.RepositoryCallback
 import by.androidacademy.architecture.domain.model.Movie
 import by.androidacademy.architecture.domain.model.MovieVideo
-import by.androidacademy.architecture.domain.mappers.Mapper
 
 class MoviesRepositoryImpl(
     private val onlineDataSource: MoviesDataSource,

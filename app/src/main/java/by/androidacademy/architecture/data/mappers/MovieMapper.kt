@@ -3,7 +3,6 @@ package by.androidacademy.architecture.data.mappers
 import by.androidacademy.architecture.api.ApiConstants
 import by.androidacademy.architecture.api.response.MovieJson
 import by.androidacademy.architecture.domain.model.Movie
-import by.androidacademy.architecture.domain.mappers.Mapper
 
 class MovieMapper : Mapper<MovieJson, Movie> {
 
